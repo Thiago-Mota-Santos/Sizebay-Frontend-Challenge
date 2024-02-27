@@ -1,4 +1,5 @@
-import { styled } from "styled-components";
+import { Search } from "lucide-react";
+import { css, styled } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -9,7 +10,6 @@ export const Container = styled.div`
   height: 650px;
   box-shadow: 0px 3px 6px #00000029
   border-radius: 4px;
-
   background-color: var(--white);
 `
 
@@ -19,7 +19,7 @@ export const Header = styled.header`
    align-items: center;
    justify-content: space-between;
    width: 100%;
-
+   height: 10vh;
 
   > span {
     font: normal normal normal 24px/32px Roboto;
@@ -64,21 +64,65 @@ export const DateHeader = styled.div`
 
  
 `
+const StatusSpanBase = css`
+  width: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  border: 1px solid #dbdbdb;
+  border-radius: 16px;
+  height: 32px;
+  opacity: 1;
+  background: #ffffff;
+`;
 
-export const Progress = styled.div`
-  
-`
+export const StatusSpanPending = css`
+  ${StatusSpanBase}
+  width: 84px;
+`;
+
+export const StatusSpan = styled.span<{ variant?: 'pending'}>`
+  ${StatusSpanBase}
+
+  ${({ variant }) => variant === "pending" && StatusSpanPending}
+`;
+
+export const DoneSpan = styled(StatusSpan)``;
+export const PendingSpan = styled(StatusSpan)``;
 
 export const SearchContainer = styled.div`
-  > span {
-    color: red;
-  }
+    position: relative;
+    margin-left: 108px;
+    display: flex;
+    margin-top: 16px;
+    width: 100%;
+    gap: 4px;
+
 `
 
 export const Input = styled.input`
-  
+  padding-right: 30px;
+  border: 1px solid #DBDBDB;
+  padding: 8px;
+  border-radius: 4px;
+  width: 450px;
+  height: 40px;
+  margin-left: 60px;
+  color: #848484;
+
+  &::placeholder {
+    color: black;
+  }
 `
 
+export const SearchIcon = styled(Search)`
+  position: absolute;
+  top: 50%;
+  right: 146px;
+  transform: translateY(-50%);
+  cursor: pointer;
+`;
 export const Button = styled.button`
   
 `

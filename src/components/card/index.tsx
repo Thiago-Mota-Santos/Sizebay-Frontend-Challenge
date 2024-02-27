@@ -1,4 +1,6 @@
-import { Button, Container, DateHeader, Header, Input, Progress, SearchContainer } from "./styles";
+import { Search } from "lucide-react";
+import Progress from "../progress";
+import { Button, Container, DateHeader, DoneSpan, Header, Input, PendingSpan, SearchContainer, SearchIcon, StatusSpan } from "./styles";
 
 export default function Card() {
     return (
@@ -13,11 +15,12 @@ export default function Card() {
                  </DateHeader>
                  <span>Wednesday</span>    
             </Header>
-            <Progress className="progress-bar">...</Progress>
+            <Progress value={30} />
             <SearchContainer>
-                <span>Done</span>
-                <span>Pending</span>
-                <Input type="text" placeholder="Search itens"  /> TODO: add search icon
+                <StatusSpan>Done</StatusSpan>
+                <StatusSpan variant="pending" >Pending</StatusSpan>
+                <Input type="text" placeholder="Search itens"  />
+                <SearchIcon color="#848484"/>
             </SearchContainer>
             <Button>Add new item</Button> {/* TODO: add plus icon */}
         </Container>
