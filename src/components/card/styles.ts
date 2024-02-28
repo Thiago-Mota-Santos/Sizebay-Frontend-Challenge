@@ -58,11 +58,7 @@ export const DateHeader = styled.div`
     font: normal normal 300 24px/32px Roboto;
     letter-spacing: 0px;
   }
-
-  
  }
-
- 
 `
 const StatusSpanBase = css`
   width: 64px;
@@ -98,15 +94,14 @@ export const SearchContainer = styled.div`
     margin-top: 16px;
     width: 100%;
     gap: 4px;
-
 `
 
-export const Input = styled.input`
+export const Input = styled.input<{ width?: string}>`
   padding-right: 30px;
   border: 1px solid #DBDBDB;
   padding: 8px;
   border-radius: 4px;
-  width: 450px;
+  ${({ width }) => width && `width: ${width};`}
   height: 40px;
   margin-left: 60px;
   color: #848484;
@@ -114,6 +109,8 @@ export const Input = styled.input`
   &::placeholder {
     color: black;
   }
+
+  
 `
 
 export const SearchIcon = styled(Search)`
@@ -123,6 +120,19 @@ export const SearchIcon = styled(Search)`
   transform: translateY(-50%);
   cursor: pointer;
 `;
+
+export const AddContainer = styled.div`
+  position: relative;
+  display: flex;
+  margin-top: 16px;
+  width: 100%;
+  gap: 4px;
+
+  > form {
+    width: 100%;
+  }
+`;
+
 export const Button = styled.button`
   
 `
