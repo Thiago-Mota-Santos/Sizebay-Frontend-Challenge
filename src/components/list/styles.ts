@@ -13,6 +13,9 @@ export const Container = styled.div`
 `;
 
 export const TodoItem = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     padding: 8px;
     background-color: #F4F4F4;
