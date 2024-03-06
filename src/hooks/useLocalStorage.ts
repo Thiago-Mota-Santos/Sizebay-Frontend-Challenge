@@ -9,5 +9,33 @@ export default function useLocalStorage(key: string){
         localStorage.setItem(key, JSON.stringify(value));
     },[value, key])
 
-    return [value, setValue]
+    const remove = (index: number) => {
+        setValue((current: string[]) => {
+            const newState = [...current]
+            newState.splice(index, 1)
+            return newState
+        })
+    }
+
+    const edit = (index: number, newValue: string) => {
+        setValue((current: string[]) => {
+            const newState = [...current]
+            newState[index] = newValue
+            return newState
+        })
+    }
+
+    const complete = (index: number) => {
+        setValue((current: string[]) => {
+            const newState = current.map((item, i) => {
+                if (i === index) {
+                    return { text: item, status: "done" };
+                }
+                return item;
+            });
+            return newState;
+        })
+    }
+
+    return [value, setValue, { remove, edit, complete }]
 }
