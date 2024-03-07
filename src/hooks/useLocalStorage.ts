@@ -28,7 +28,6 @@ export default function useLocalStorage(key: string){
             })
             return 
         }
-        console.log("poggers")
         setDoneValue((current: string[]) => {
             const newState = [...current];
             newState.splice(index, 1);
