@@ -4,17 +4,36 @@ export default function useLocalStorage(key: string){
     const [value, setValue] = useState(() => {
         return JSON.parse(localStorage.getItem(key)!);
     })
+
+    const doneKey = key + "_done";
+    const [doneValue, setDoneValue] = useState<string[]>(() => {
+        const storedData = localStorage.getItem(doneKey);
+        return storedData ? JSON.parse(storedData) : [];
+    });
+    const updateLocalStorage = (key: string, data: string[]) => {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
     
     useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(value));
-    },[value, key])
+        updateLocalStorage(key, value);
+        updateLocalStorage(doneKey, doneValue);
+    },[value, doneValue, key, doneKey])
 
-    const remove = (index: number) => {
-        setValue((current: string[]) => {
-            const newState = [...current]
-            newState.splice(index, 1)
-            return newState
-        })
+    const remove = (index: number, selectedButton = "pending") => {
+        if(selectedButton === "pending") {
+            setValue((current: string[]) => {
+                const newState = [...current]
+                newState.splice(index, 1)
+                return newState
+            })
+            return 
+        }
+        console.log("poggers")
+        setDoneValue((current: string[]) => {
+            const newState = [...current];
+            newState.splice(index, 1);
+            return newState;
+        });
     }
 
     const edit = (index: number, newValue: string) => {
@@ -26,16 +45,10 @@ export default function useLocalStorage(key: string){
     }
 
     const complete = (index: number) => {
-        setValue((current: string[]) => {
-            const newState = current.map((item, i) => {
-                if (i === index) {
-                    return { text: item, status: "done" };
-                }
-                return item;
-            });
-            return newState;
-        })
-    }
+        const task = value[index];
+        setDoneValue((current: string[]) => [...current, task]);
+        remove(index);
+    };
 
-    return [value, setValue, { remove, edit, complete }]
+    return [value, doneValue,  setValue, { remove, edit, complete }]
 }
