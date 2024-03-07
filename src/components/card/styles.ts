@@ -78,14 +78,23 @@ export const StatusSpanPending = css`
   width: 84px;
 `;
 
-export const StatusSpan = styled.span<{ variant?: 'pending'}>`
+export const StatusButton = styled.button<{ variant?: 'pending', active?: boolean}>`
   ${StatusSpanBase}
 
   ${({ variant }) => variant === "pending" && StatusSpanPending}
+
+  ${({ active }) => active ? css`
+  border: 1px solid #4DA6B3;
+  color: #4DA6B3;
+` : ''}
+
+
+  padding: 0 8px; 
+  margin-right: 8px; 
 `;
 
-export const DoneSpan = styled(StatusSpan)``;
-export const PendingSpan = styled(StatusSpan)``;
+export const DoneSpan = styled(StatusButton)``;
+export const PendingSpan = styled(StatusButton)``;
 
 export const SearchContainer = styled.div`
     position: relative;
