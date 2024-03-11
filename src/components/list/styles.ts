@@ -25,16 +25,31 @@ export const TodoItem = styled.div`
     color: #848484;
     margin-left: 60px;
     position: relative;
+    min-height: 40px;
+    outline: none;
 
     &:hover {
         background: #FFFFFF;
         > div {
             display: flex;
-            align-items: center
-            justify-content: center
+            align-items: center;
+            justify-content: center;
         }
     }
-`
+`;
+
+export const TodoText = styled.span`
+    max-width: calc(100% - 120px); 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #848484;
+    border: none; 
+    outline: none; 
+    
+    &:focus {
+      outline: none; 
+    }
+`;
 
 export const Tooltip = styled.div`
    z-index: 2;
@@ -81,10 +96,26 @@ export const ButtonContainer = styled.div`
        height: 40px;
        background: #5DE290;
     }
+
 `;
 
+export const Text = styled.span`
+    margin-left: 62px;
+    color: #848484;
+    font: normal normal normal 14px/19px Roboto;
 
-export const IconButton = styled.button`
+    >span {
+        text-decoration: underline;
+        color: #848484;
+
+        &:hover {
+         cursor: pointer;
+        }
+
+    }
+`
+
+export const IconButton = styled.div`
     margin-top: 4px;
     background-color: transparent;
     border: none;
