@@ -7,19 +7,29 @@ import {
     Header,
     Input,
     SearchContainer,
-    StatusButton
+    StatusButton,
+    Text
 } from "./styles";
 import { Icon } from "../icon";
 import List from "../list";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import useWindowSize from "../../hooks/useWindowSize";
+import Confetti from 'react-confetti'
+import { dayOfWeek, month, year } from "../../utils/date";
 
 export default function Card() {
-    const [inputValue, setInputValue] = useState<string>("")
-    const [ value, doneValue, setValue, { remove, edit, complete }] = useLocalStorage("items")
-    const [selectedButton, setSelectedButton] = useState<string | null>("pending");
+    const { width, height } = useWindowSize()
+    const [inputValue, setInputValue] = useState<string>("");
+    const [showConfetti, setShowConfetti] = useState(false);
+    const [value, doneValue, setValue, { remove, edit, complete }] = useLocalStorage("items");
+    const [selectedButton, setSelectedButton] = useState<string | null>("");
     const [searchTerm, setSearchTerm] = useState<string>("");
-
+    
+    
+    const completionPercentage: number = (doneValue.length / (value.length + doneValue.length)) * 100;
+    
+   
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (inputValue.trim() !== "") {
@@ -33,8 +43,8 @@ export default function Card() {
     };
 
     const handleSearch = (term: string) => {
-        setSearchTerm(term)
-    }
+        setSearchTerm(term);
+    };
 
     const filteredList = (list: string[]) => {
         return list.filter(item =>
@@ -42,46 +52,63 @@ export default function Card() {
         );
     };
 
+
+    useEffect(() => {
+        if (completionPercentage === 100) {
+          setShowConfetti(true);
+          
+          const timer = setTimeout(() => {
+            setShowConfetti(false);
+          }, 3000);
     
+          return () => clearTimeout(timer);
+        }
+      }, [completionPercentage]);
+
     return (
         <Container>
             <Header> 
                 <DateHeader>
-                    <span>07</span>
+                    <span>{dayOfWeek}</span>
                     <div>
-                        <span>JUL</span>
-                        <span>2021</span>
+                        <span>{month}</span>
+                        <span>{year}</span>
                     </div>
                 </DateHeader>
                 <span>Wednesday</span>    
             </Header>
-            <Progress value={30} />
+            {showConfetti ? <Confetti width={width} height={height}/> : null}
+            <Progress value={completionPercentage} />
             <SearchContainer>
-                <StatusButton 
-                    onClick={() => handleButtonClick('done')} 
-                    active={selectedButton === 'done'}
-                >
-                    {selectedButton === 'done' ? <Check size={12} color="#4DA6B3"/>: null}
-                    Done
-                </StatusButton>
+    <div>
+        <StatusButton 
+            onClick={() => handleButtonClick('done')} 
+            active={selectedButton === 'done'}
+        >
+            {selectedButton === 'done' ? <Check size={12} color="#4DA6B3"/>: null}
+            Done
+        </StatusButton>
 
-                <StatusButton 
-                    variant="pending" 
-                    onClick={() => handleButtonClick('pending')} 
-                    active={selectedButton === 'pending'}
-                >   
-                    {selectedButton === 'pending' ? <Check size={12} color="#4DA6B3"/>: null}
-                    Pending
-                </StatusButton>
-                <Input 
-                   width="450px" 
-                   type="text" 
-                   placeholder="Search itens" 
-                   value={searchTerm}
-                   onChange={(e) => handleSearch(e.target.value)} 
-                />
-                <Icon right="148px" icon={Search}  color="#848484"/>
-            </SearchContainer>
+        <StatusButton 
+            variant="pending" 
+            onClick={() => handleButtonClick('pending')} 
+            active={selectedButton === 'pending'}
+        >   
+            {selectedButton === 'pending' ? <Check size={12} color="#4DA6B3"/>: null}
+            Pending
+        </StatusButton>
+    </div>
+    <div>
+        <Input 
+            width={window.innerWidth <= 600 ? '300px' : '450px'}
+            type="text" 
+            placeholder="Search itens" 
+            value={searchTerm}
+            onChange={(e) => handleSearch(e.target.value)} 
+        />
+        <Icon right={window.innerWidth <= 600 ? '12px' : '148px'} icon={Search}  color="#848484"/>
+    </div>
+</SearchContainer>
             <AddContainer>
                 <form onSubmit={handleSubmit}>
                     <Input 
@@ -91,15 +118,26 @@ export default function Card() {
                         onChange={(e) => setInputValue(e.target.value)}
                     />
                     <button type="submit">
-                        <Icon right="94px" icon={PlusCircle}  color="#848484"/>
+                        <Icon right={window.innerWidth <= 600 ? '10px' : '94px'} top="50%" icon={PlusCircle}  color="#848484"/>
                     </button>
                 </form>
             </AddContainer>
             {selectedButton === 'done' ? (
-                <List list={filteredList(doneValue)} remove={remove} edit={edit} complete={complete} selectedButton="done" />
+                <List list={filteredList(doneValue)} remove={remove} edit={edit} complete={complete} selectedButton="done" setSelectButton={setSelectedButton} />
             ) : (
-                <List list={filteredList(value)} remove={remove} edit={edit} complete={complete} selectedButton="pending" />
+                <List list={filteredList(value)} remove={remove} edit={edit} complete={complete} selectedButton="pending" setSelectButton={setSelectedButton}/>
             )}
+            {
+                filteredList(selectedButton === 'done' ? doneValue : value).length === 0 && searchTerm.trim() !== "" && (
+                    <Text>
+                        Your search found no results.
+                        <button onClick={() => setSearchTerm('')}>
+                            <span>Clear the search here </span>
+                        </button>{" "}
+                        to see all items
+                    </Text>
+                )
+            }
         </Container>
     )
 }

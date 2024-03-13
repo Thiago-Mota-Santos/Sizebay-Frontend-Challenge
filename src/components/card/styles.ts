@@ -8,9 +8,15 @@ export const Container = styled.div`
   z-index: 2;
   width: 800px;
   height: 650px;
+  max-width: 100%;
   box-shadow: 0px 3px 6px #00000029
   border-radius: 4px;
   background-color: var(--white);
+
+  @media screen and (max-width: 600px) {
+    width: 341px;
+  }
+  
 `
 
 export const Header = styled.header`
@@ -79,18 +85,22 @@ export const StatusSpanPending = css`
 `;
 
 export const StatusButton = styled.button<{ variant?: 'pending', active?: boolean}>`
-  ${StatusSpanBase}
+    ${StatusSpanBase}
 
-  ${({ variant }) => variant === "pending" && StatusSpanPending}
+    ${({ variant }) => variant === "pending" && StatusSpanPending}
 
-  ${({ active }) => active ? css`
-  border: 1px solid #4DA6B3;
-  color: #4DA6B3;
-` : ''}
+    ${({ active }) => active ? css`
+    border: 1px solid #4DA6B3;
+    color: #4DA6B3;
+  ` : ''}
 
 
-  padding: 0 8px; 
-  margin-right: 8px; 
+    padding: 0 8px; 
+    margin-right: 8px; 
+
+    @media screen and (max-width: 600px) {
+     // enter here
+  }
 `;
 
 export const DoneSpan = styled(StatusButton)``;
@@ -103,7 +113,26 @@ export const SearchContainer = styled.div`
     margin-top: 16px;
     width: 100%;
     gap: 4px;
-`
+
+    > div {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-end;
+        margin-left: -30px;
+
+        > div:first-child {
+            order: 2;
+            margin-top: 4px;
+            margin-bottom: 2px; 
+        }
+    }
+`;
+
 
 export const Input = styled.input<{ width?: string}>`
   padding-right: 30px;
@@ -118,8 +147,6 @@ export const Input = styled.input<{ width?: string}>`
   &::placeholder {
     color: black;
   }
-
-  
 `
 
 export const SearchIcon = styled(Search)`
@@ -140,7 +167,30 @@ export const AddContainer = styled.div`
   > form {
     width: 100%;
   }
+
+  @media screen and (max-width: 600px) {
+    width: 356px;
+    margin-right: 62px;
+  }
 `;
+
+
+export const Text = styled.span`
+    margin-top: 16px;
+    margin-right: 260px;
+    color: #848484;
+    font: normal normal normal 14px/19px Roboto;
+
+    span {
+        text-decoration: underline;
+        color: #848484;
+
+        &:hover {
+         cursor: pointer;
+        }
+
+    }
+`
 
 export const Button = styled.button`
   
